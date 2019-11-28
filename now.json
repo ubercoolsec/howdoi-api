@@ -5,6 +5,7 @@
 	],
 	"routes": [
 		{ "src": "/", "dest": "app.py" },
-		{ "src": "/howdoi", "dest": "app.py" }
+		{ "src": "/howdoi", "dest": "app.py" },
+		{ "src": "/telegram", "dest": "app.py" }
 	]
 }
