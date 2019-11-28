@@ -4,7 +4,6 @@ import os
 import json
 import telegram
 
-
 os.environ["HOWDOI_DISABLE_CACHE"] = 'true'
 
 from flask import Flask, request, Response
@@ -13,7 +12,8 @@ from howdoi import howdoi
 TELEGRAM_BOT_START_TEXT = """
 Howdy! I am the goto magic bot for your coding needs.
 
-Forget Google and talk to me. I can respond to any of your coding queries. For example, coding `Python` and forgot about if/else syntax, just ask me
+Forget Google and talk to me. I can respond to any of your coding queries.
+For example, coding `Python` and forgot about if/else syntax, just ask me
 
 ```
 use condition in python
@@ -29,7 +29,6 @@ Did you know that I speak multiple languages?
 make http request in golang
 ```
 Try me now! :)
-
 """
 
 app = Flask(__name__)
