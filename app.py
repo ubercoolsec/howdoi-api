@@ -26,6 +26,6 @@ def readme():
     return "https://github.com/gleitz/howdoi"
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=False)
 
 
