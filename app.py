@@ -16,15 +16,27 @@ def _howdoi(query):
 
     return howdoi.howdoi(args)
 
+def telegram_respond_text(chat_id, text):
+    r = {}
+    r["chat_id"] = chat_id
+    r["text"] = text
+
+    return json.dumps(r)
+
 @app.route('/telegram', methods = ['GET', "POST"])
 def telegram_webhook():
     body = json.loads(request.data)
+    chat_id = body["message"]["chat"]["id"]
     query = body["message"]["text"]
 
     if not query:
-        return 'What?'
+        return ''
 
-    return _howdoi(query)
+    if query == '/start':
+        return telegram_respond_text(chat_id,
+            'Howdy! Tell me what you want to know about coding, such as: loop in Java')
+
+    return telegram_respond_text(chat_id, _howdoi(query))
 
 @app.route('/howdoi')
 def hdi():
