@@ -5,7 +5,7 @@ import json
 
 os.environ["HOWDOI_DISABLE_CACHE"] = 'true'
 
-from flask import Flask, request
+from flask import Flask, request, Response
 from howdoi import howdoi
 
 app = Flask(__name__)
@@ -21,7 +21,7 @@ def telegram_respond_text(chat_id, text):
     r["chat_id"] = chat_id
     r["text"] = text
 
-    return json.dumps(r)
+    return Response(json.dumps(r), mimetype='application/json')
 
 @app.route('/telegram', methods = ['GET', "POST"])
 def telegram_webhook():
