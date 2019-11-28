@@ -2,13 +2,35 @@
 
 import os
 import json
-import requests
+import telegram
+
 
 os.environ["HOWDOI_DISABLE_CACHE"] = 'true'
-telegramURL = "https://api.telegram.org/bot" + os.environ["HOWDOIBOT_API_KEY"] + "/sendMessage"
 
 from flask import Flask, request, Response
 from howdoi import howdoi
+
+TELEGRAM_BOT_START_TEXT = """
+Howdy! I am the goto magic bot for your coding needs.
+
+Forget Google and talk to me. I can respond to any of your coding queries. For example, coding `Python` and forgot about if/else syntax, just ask me
+
+```
+use condition in python
+```
+or, you can make it more real..
+
+```
+connect to mysql using python
+```
+Did you know that I speak multiple languages?
+
+```
+make http request in golang
+```
+Try me now! :)
+
+"""
 
 app = Flask(__name__)
 
@@ -18,28 +40,33 @@ def _howdoi(query):
 
     return howdoi.howdoi(args)
 
-def telegram_respond_text(chat_id, text):
-    r = {}
-    r["chat_id"] = chat_id
-    r["text"] = text
-    headers = {'content-type': 'application/json'}
+def telegram_respond_start(bot, chat_id):
+    bot.send_message(chat_id=chat_id,
+        text=TELEGRAM_BOT_START_TEXT,
+        parse_mode=telegram.ParseMode.MARKDOWN)
 
-    return Response(requests.post(telegramURL, data=json.dumps(r), headers=headers))
+def telegram_respond_text(bot, chat_id, text):
+    bot.send_message(chat_id=chat_id,
+        text=text,
+        parse_mode=telegram.ParseMode.MARKDOWN)
 
 @app.route('/telegram', methods = ['GET', "POST"])
 def telegram_webhook():
+    bot = telegram.Bot(token=os.environ["TELEGRAM_BOT_TOKEN"])
     body = json.loads(request.data)
     chat_id = body["message"]["chat"]["id"]
     query = body["message"]["text"]
 
     if not query:
-        return ''
+        return 'NO QUERY'
 
     if query == '/start':
-        return telegram_respond_text(chat_id,
-            'Howdy! Tell me what you want to know about coding, such as: loop in Java')
+        telegram_respond_start(bot, chat_id)
+    else:
+        text = '```\n' + _howdoi(query) + '\n```'
+        telegram_respond_text(bot, chat_id, text)
 
-    return telegram_respond_text(chat_id, _howdoi(query))
+    return 'OK'
 
 @app.route('/howdoi')
 def hdi():
@@ -56,3 +83,5 @@ def readme():
 
 if __name__ == '__main__':
     app.run(debug=False)
+
+
