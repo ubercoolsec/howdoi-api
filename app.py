@@ -2,8 +2,10 @@
 
 import os
 import json
+import requests
 
 os.environ["HOWDOI_DISABLE_CACHE"] = 'true'
+telegramURL = "https://api.telegram.org/bot" + os.environ["HOWDOIBOT_API_KEY"] + "/sendMessage"
 
 from flask import Flask, request, Response
 from howdoi import howdoi
@@ -20,8 +22,9 @@ def telegram_respond_text(chat_id, text):
     r = {}
     r["chat_id"] = chat_id
     r["text"] = text
+    headers = {'content-type': 'application/json'}
 
-    return Response(json.dumps(r), mimetype='application/json')
+    return Response(requests.post(telegramURL, data=json.dumps(r), headers=headers))
 
 @app.route('/telegram', methods = ['GET', "POST"])
 def telegram_webhook():
@@ -53,5 +56,3 @@ def readme():
 
 if __name__ == '__main__':
     app.run(debug=False)
-
-
