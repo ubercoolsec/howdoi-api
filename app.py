@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import json
 
 os.environ["HOWDOI_DISABLE_CACHE"] = 'true'
 
@@ -15,12 +16,15 @@ def _howdoi(query):
 
     return howdoi.howdoi(args)
 
-@app.route('/telegram')
+@app.route('/telegram', methods = ['GET', "POST"])
 def telegram_webhook():
-    body = request.data
+    body = json.loads(request.data)
+    query = body["message"]["text"]
 
-    # TODO: Respond to bot webhook
-    # https://core.telegram.org/bots/api#message
+    if not query:
+        return 'What?'
+
+    return _howdoi(query)
 
 @app.route('/howdoi')
 def hdi():
