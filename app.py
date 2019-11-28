@@ -9,6 +9,19 @@ from howdoi import howdoi
 
 app = Flask(__name__)
 
+def _howdoi(query):
+    parser = howdoi.get_parser()
+    args = vars(parser.parse_args(query.split(' ')))
+
+    return howdoi.howdoi(args)
+
+@app.route('/telegram')
+def telegram_webhook():
+    body = request.data
+
+    # TODO: Respond to bot webhook
+    # https://core.telegram.org/bots/api#message
+
 @app.route('/howdoi')
 def hdi():
     query = request.args.get('query')
@@ -16,10 +29,7 @@ def hdi():
     if not query:
         return ''
 
-    parser = howdoi.get_parser()
-    args = vars(parser.parse_args(query.split(' ')))
-
-    return howdoi.howdoi(args)
+    return _howdoi(query)
 
 @app.route('/')
 def readme():
