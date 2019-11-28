@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+import os
+
+os.environ["HOWDOI_DISABLE_CACHE"] = 'true'
+
 from flask import Flask, request
 from howdoi import howdoi
 
