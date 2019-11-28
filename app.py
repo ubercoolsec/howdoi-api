@@ -13,6 +13,7 @@ TELEGRAM_BOT_START_TEXT = """
 Howdy! I am the goto magic bot for your coding needs.
 
 Forget Google and talk to me. I can respond to any of your coding queries.
+
 For example, coding `Python` and forgot about if/else syntax, just ask me
 
 ```
