@@ -60,7 +60,7 @@ def telegram_webhook():
     if not query:
         return 'NO QUERY'
 
-    if query == '/start':
+    if (query == '/start') or (query == '/help'):
         telegram_respond_start(bot, chat_id)
     else:
         text = '```\n' + _howdoi(query) + '\n```'
