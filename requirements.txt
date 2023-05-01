@@ -1,4 +1,4 @@
-Flask==1.1.1
+Flask==2.3.2
 howdoi==1.2.1
 python-telegram-bot==12.2.0
 
